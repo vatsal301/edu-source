@@ -1,0 +1,119 @@
+<%- include('../layouts/Header'); %>
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card">
+                <div class="card-header py-3 bg-transparent">
+                    <h5 class="mb-0">Add New Subject</h5>
+                </div>
+                <div class="card-body">
+                    <div class="border p-3 rounded">
+                        <form class="row g-3" action="/subject/create" method="post">
+                            <div class="col-12">
+                                <label class="form-label">Subject Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Enter Subject Name">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Branch</label>
+                                <select id="branch" class="form-select" name="branch_id">
+                                    <option value="false">Select Branch</option>
+                                    <% branch.forEach((item)=> { %>
+                                        <option value="<%= item._id %>">
+                                            <%= item.name %>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Semester</label>
+                                <select id="sem" class="form-select" name="sem">
+                                    <option value="false">Select Semester</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Status</label>
+                                <select name="status" class="form-select">
+                                    <option>Active</option>
+                                    <option>Disabled</option>
+                                </select>
+                            </div>
+                            <!-- <div class="col-12">
+                                <label class="form-label">Full description</label>
+                                <textarea class="form-control" placeholder="Full description" rows="4"
+                                    cols="4"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Images</label>
+                                <input class="form-control" type="file">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Tags</label>
+                                <input type="text" class="form-control" placeholder="Enter tags">
+                            </div>
+                          
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Sub-category</label>
+                                <select class="form-select">
+                                    <option>Jeans</option>
+                                    <option>T-Shirts</option>
+                                    <option>Shoes</option>
+                                    <option>Mobiles</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Price</label>
+                                <div class="row g-3">
+                                    <div class="col-lg-9">
+                                        <input type="text" class="form-control" placeholder="Price">
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="input-group">
+                                            <select class="form-select">
+                                                <option> USD </option>
+                                                <option> EUR </option>
+                                                <option> RUBL </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Publish on website
+                                    </label>
+                                </div>
+                            </div> -->
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary px-4">Craete Branch</button>
+                            </div>
+                            <span id="message" class="text-danger lead">
+                                <%= messageCreate %>
+                            </span>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--end row-->
+    <%- include('../layouts/Footer'); %>
+
+        <script>
+            setTimeout(() => {
+                document.getElementById("message").innerHTML = ""
+            }, 3000);
+            $('#branch').on('change', function () {
+                if (this.value != "false") {
+                    $.post("/subject/sem", { branch_id: this.value }, function (data) {
+                        $("#sem").html(`<option value="false">Select Semester</option>`)
+                        for (let i = 0; i < data.totalSem; i++) {
+                            $("#sem").append(`<option>${i + 1}</option>`);
+                        }
+                    });
+                } else {
+                    $("#sem").html(`<option value="false">Select Semester</option>`)
+                }
+            });
+
+        </script>
